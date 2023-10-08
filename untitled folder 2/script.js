@@ -1,15 +1,4 @@
-// let matrix = [
-//     [0,0,0,0,0,0,0,0,0,0],
-//     [0,0,0,0,0,0,0,0,0,0],
-//     [0,0,0,0,0,0,0,0,0,0],
-//     [0,0,0,0,0,0,0,0,0,0],
-//     [0,0,0,0,0,0,0,0,0,0],
-//     [0,0,0,0,0,0,0,0,0,0],
-//     [0,0,0,0,2,0,0,0,0,0],
-//     [0,0,0,0,0,0,0,0,0,0],
-//     [0,0,0,0,0,0,0,0,0,0],
-//     [0,0,0,0,0,0,0,0,0,1]
-//     ]
+
 let matrix = [];
 
 function matrixGenerator(size, countGrass, countGrassEater, countPredator, countBlackHole, countThickGrass) {
@@ -115,13 +104,13 @@ function draw() {
         grassEaterArr[i].mul()
     }
     for (let i = 0; i < PredatorArr.length; i++) {
-           PredatorArr[i].eat()
+        PredatorArr[i].eat()
     }
-    for(let i = 0; i<blackHoleArr.length; i++){
+    for (let i = 0; i < blackHoleArr.length; i++) {
         blackHoleArr[i].mul()
     }
-    for(let i = 0; i<blackHoleArr.length; i++){
-       blackHoleArr[i].eat()
+    for (let i = 0; i < blackHoleArr.length; i++) {
+        blackHoleArr[i].eat()
     }
     for (let i = 0; i < thickGrassArr.length; i++) {
         thickGrassArr[i].mul()

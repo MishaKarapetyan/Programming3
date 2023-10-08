@@ -1,22 +1,12 @@
-class blackHole {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+class blackHole extends LivingCreature {
+    constructor(x, y, energy) {
+        super(x, y, energy)
         this.energy = 3;
         this.directions = [];
     }
-    chooseCell(character) { // empty cells array [[1,2], [2,4]]
-        let found = [] //
-        for (let i in this.directions) {
-            let x = this.directions[i][0]
-            let y = this.directions[i][1]
-            if (x >= 0 && x < matrix[0].length && y >= 0 && y < matrix.length) {
-                if (matrix[y][x] == character) { //
-                    found.push(this.directions[i])
-                }
-            }
-        }
-        return found
+    chooseCell(character) {
+        this.getNewCoordinates();
+        return super.chooseCell(character);
     }
 
     getNewCoordinates() {
@@ -46,7 +36,7 @@ class blackHole {
                 this.x = neighX
             }
         }
-      
+
     }
 
     eat() {
@@ -94,15 +84,15 @@ class blackHole {
         }
     }
     mul() {
-        if (this.energy > 50){
-        var newCell = random(this.chooseCell(0)); //newCell-1 datark harevan
-        if ( newCell) { //[3,4]
-        var newBlackHole = new blackHole(newCell[0], newCell[1]);
-        blackHoleArr.push(newBlackHole);
-        matrix[newCell[1]][newCell[0]] = 4;
-        this.energy = this.energy-10
+        if (this.energy > 50) {
+            var newCell = random(this.chooseCell(0)); //newCell-1 datark harevan
+            if (newCell) { //[3,4]
+                var newBlackHole = new blackHole(newCell[0], newCell[1]);
+                blackHoleArr.push(newBlackHole);
+                matrix[newCell[1]][newCell[0]] = 4;
+                this.energy = this.energy - 10
 
-}
+            }
         }
     }
 }
