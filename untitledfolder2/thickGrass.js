@@ -1,4 +1,6 @@
-class thickGrass extends LivingCreature {
+let livingCreature = require('./livingCreature')
+let random = require("./random");
+module.exports = class thickGrass extends livingCreature {
     constructor(x, y, energy) {
         super(x, y, energy)
         this.multiply = 3;

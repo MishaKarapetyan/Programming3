@@ -1,4 +1,7 @@
-class Grass extends LivingCreature {
+
+let random = require("./random");
+let livingCreature = require('./livingCreature')
+module.exports = class Grass extends livingCreature {
   constructor(x, y, energy) {
     super(x, y, energy)
     delete this.energy
