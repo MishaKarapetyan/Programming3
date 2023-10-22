@@ -1,24 +1,25 @@
+
 var express = require("express");
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 app.use(express.static("."));
 app.get("/", function (req, res) {
-   res.redirect("index.html");
+    res.redirect("index.html");
 });
-server.listen(3000, ()=> {
-   console.log("ashxatum em mi anhangstaciii")
+server.listen(3000, () => {
+    console.log("ashxatum em mi anhangstaciii")
 });
 
-
-let livingCreature = require('./livingCreature')
-let grass = require('./grass')
-let grassEater = require('./grassEater')
-let predator = require('./predator')
+matrix = [];
+let Grass = require('./grass')
+let GrassEater = require('./grassEater')
+let Predator = require('./predator')
 let blackHole = require('./blackHole')
 let thickGrass = require('./thickGrass')
 let random = require("./random");
-lmatrix = [];
+let season = "summer";
+
 
 function matrixGenerator(size, countGrass, countGrassEater, countPredator, countBlackHole, countThickGrass) {
     for (let i = 0; i < size; i++) {
@@ -61,70 +62,66 @@ blackHoleArr = [];
 thickGrassArr = [];
 
 
-function setupGame(){
-   matrixGenerator(100, 0, 100, 50, 1, 100)
-   for (let y = 0; y < 100; y++) {
-      for (let x = 0; x < 100; x++) {
-          if (matrix[y][x] == 1) {
-              let gr = new Grass(x, y)
-              grassArr.push(gr)
-          } else if (matrix[y][x] == 2) {
-              let grE = new GrassEater(x, y)
-              grassEaterArr.push(grE)
-          } else if (matrix[y][x] == 3) {
-              let pre = new Predator(x, y)
-              PredatorArr.push(pre)
-          }
-          else if (matrix[y][x] == 4) {
-              let bl = new blackHole(x, y)
-              blackHoleArr.push(bl)
-          }
-          else if (matrix[y][x] == 5) {
-              let th = new thickGrass(x, y)
-              thickGrassArr.push(th)
-          }
-          io.emit('update matrix',matrix)
+function setupGame() {
+    matrixGenerator(100, 10, 100, 50, 1, 100)
+    for (let y = 0; y < 100; y++) {
+        for (let x = 0; x < 100; x++) {
+            if (matrix[y][x] == 1) {
+                let gr = new Grass(x, y)
+                grassArr.push(gr)
+            } else if (matrix[y][x] == 2) {
+                let grE = new GrassEater(x, y)
+                grassEaterArr.push(grE)
+            } else if (matrix[y][x] == 3) {
+                let pre = new Predator(x, y)
+                PredatorArr.push(pre)
+            }
+            else if (matrix[y][x] == 4) {
+                let bl = new blackHole(x, y)
+                blackHoleArr.push(bl)
+            }
+            else if (matrix[y][x] == 5) {
+                let th = new thickGrass(x, y)
+                thickGrassArr.push(th)
+            }
 
-      }
-  }
+
+        }
+    }
 }
+setupGame();
+io.on('connection', function (socket) {
+    socket.on("event-weather", function({ weather }) {
+        season = weather;
+    })
 
-io.on('connection', function (socket){
-   socket.emit('update matrix',matrix)
-   playGame()
-   startPlaying()
+    setInterval(() => {
+        playGame()
+        socket.emit('draw', {matrix, season})
+    }, 1000);
 })
 
-function playGame(){
-   for (let i = 0; i < grassArr.length; i++) {
-      grassArr[i].mul()
-  }
-  for (let i = 0; i < grassEaterArr.length; i++) {
-      grassEaterArr[i].eat()
-  }
-  for (let i = 0; i < grassEaterArr.length; i++) {
-      grassEaterArr[i].mul()
-  }
-  for (let i = 0; i < PredatorArr.length; i++) {
-      PredatorArr[i].eat()
-  }
-  for (let i = 0; i < blackHoleArr.length; i++) {
-      blackHoleArr[i].mul()
-  }
-  for (let i = 0; i < blackHoleArr.length; i++) {
-      blackHoleArr[i].eat()
-  }
-  for (let i = 0; i < thickGrassArr.length; i++) {
-      thickGrassArr[i].mul()
-  }
-}
-let int = 1000;
-let intervalID;
-
-function startPlaying(){
-   clearInterval(intervalID)
-   intervalID = setInterval(()=>{
-      playGame()
-   },int);
+function playGame() {
+    for (let i = 0; i < grassArr.length; i++) {
+        grassArr[i].mul()
+    }
+    for (let i = 0; i < grassEaterArr.length; i++) {
+        grassEaterArr[i].eat()
+    }
+    for (let i = 0; i < grassEaterArr.length; i++) {
+        grassEaterArr[i].mul()
+    }
+    for (let i = 0; i < PredatorArr.length; i++) {
+        PredatorArr[i].eat()
+    }
+    for (let i = 0; i < blackHoleArr.length; i++) {
+        blackHoleArr[i].mul()
+    }
+    for (let i = 0; i < blackHoleArr.length; i++) {
+        blackHoleArr[i].eat()
+    }
+    for (let i = 0; i < thickGrassArr.length; i++) {
+        thickGrassArr[i].mul()
+    }
 }
 
